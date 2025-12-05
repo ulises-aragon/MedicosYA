@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="fade_white">#F6F6F6</color>
+    <color name="main">#0d7377</color>
+    <color name="main_light">#A2C9CB</color>
+    <color name="action">#2ABCA5</color>
+    <color name="action_dark">#119982</color>
+    <color name="action_dim">#68A297</color>
+    <color name="gray">#EEEEEE</color>
+    <color name="dark_gray">#666161</color>
+    <color name="less_darker_gray">#565656</color>
+    <color name="darker_gray">#212121</color>
+    <color name="transparent">#00FFFFFF</color>
+</resources>

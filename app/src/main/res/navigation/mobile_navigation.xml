@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_map">
+
+    <fragment
+        android:id="@+id/navigation_map"
+        android:name="com.aragon.medicosya.ui.client.map.MapFragment"
+        android:label="Mapa"
+        tools:layout="@layout/fragment_map" />
+
+    <fragment
+        android:id="@+id/navigation_appointments"
+        android:name="com.aragon.medicosya.ui.client.appointments.AppointmentsFragment"
+        android:label="Citas"
+        tools:layout="@layout/fragment_appointments" />
+
+    <fragment
+        android:id="@+id/navigation_account"
+        android:name="com.aragon.medicosya.ui.client.account.AccountFragment"
+        android:label="Cuenta"
+        tools:layout="@layout/fragment_account" />
+</navigation>

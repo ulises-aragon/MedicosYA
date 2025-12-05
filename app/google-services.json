@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "706118279082",
+    "project_id": "medicosya-backend",
+    "storage_bucket": "medicosya-backend.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:706118279082:android:a3d09c2c87865c5339d5d3",
+        "android_client_info": {
+          "package_name": "com.aragon.medicosya"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCES2vYwt03JgRmuh6z5PFtW0BijxpGEqo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:706118279082:android:29a2c3e435beffaa39d5d3",
+        "android_client_info": {
+          "package_name": "com.example.appdemombas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCES2vYwt03JgRmuh6z5PFtW0BijxpGEqo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

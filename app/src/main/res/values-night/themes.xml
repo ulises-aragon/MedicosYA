@@ -1,0 +1,58 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.MedicosYA" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your dark theme here. -->
+        <item name="android:statusBarColor">@color/action</item>
+        <item name="android:textViewStyle">@style/darkTextStyle</item>
+        <item name="materialButtonStyle">@style/darkButtonStyle</item>
+        <item name="editTextStyle">@style/darkFieldStyle</item>
+        <item name="chipStyle">@style/darkChipStyle</item>
+        <item name="bottomNavigationStyle">@style/bottomNavigationStyle</item>
+    </style>
+
+    <style name="Theme.MedicosYA" parent="Base.Theme.MedicosYA"/>
+
+    <style name="Theme.MedicosYA.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/darker_gray</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
+        <item name="splashScreenIconSize">48dp</item>
+        <item name="postSplashScreenTheme">@style/Theme.MedicosYA</item>
+    </style>
+
+    <style name="darkTextStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:fontFamily">@font/outfit</item>"
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/fade_white</item>
+    </style>
+
+    <style name="darkButtonStyle" parent="Widget.Material3.Button">
+        <item name="android:fontFamily">@font/outfit</item>"
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:backgroundTint">@color/action</item>
+    </style>
+
+    <style name="darkFieldStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:fontFamily">@font/outfit</item>"
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:padding">14dp</item>
+        <item name="android:textColorHint">@color/less_darker_gray</item>
+        <item name="android:background">@drawable/edit_text_background_dark</item>"
+    </style>
+
+    <style name="darkChipStyle" parent="Widget.Material3.Chip.Filter">
+        <item name="chipBackgroundColor">@color/chip_color</item>
+        <item name="android:fontFamily">@font/outfit</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/chip_text_color_dark</item>
+        <item name="checkedIconTint">@color/chip_text_color_dark</item>
+        <item name="closeIconTint">@color/chip_text_color_dark</item>
+        <item name="chipIconTint">@color/chip_text_color_dark</item>
+    </style>
+
+    <style name="bottomNavigationStyle" parent="Widget.Material3.BottomNavigationView">
+        <item name="itemTextColor">@color/navigation_text_color</item>
+        <item name="itemIconTint">@color/navigation_text_color</item>
+    </style>
+</resources>
