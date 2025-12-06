@@ -154,11 +154,44 @@ public class AppointmentRepository {
                 .orderBy("startAt", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(qs -> {
-                    List<Appointment> list = qs.toObjects(Appointment.class);
-                    for (int i = 0; i < qs.size(); i++) {
-                        list.get(i).setId(qs.getDocuments().get(i).getId());
+                    List<Task<Void>> tasks = new ArrayList<>();
+                    List<Appointment> appointmentList = new ArrayList<>();
+
+                    for (DocumentSnapshot doc : qs.getDocuments()) {
+                        // Crear una cita
+                        Appointment appointment = doc.toObject(Appointment.class);
+
+                        if (appointment == null) continue;
+                        if (appointment.getStatusEnum() == AppointmentStatus.CANCELLED) continue;
+                        if (appointment.getStatusEnum() == AppointmentStatus.COMPLETED) continue;
+                        if (appointment.getStatusEnum() == AppointmentStatus.NO_SHOW) continue;
+                        appointment.setId(doc.getId());
+                        appointmentList.add(appointment);
+
+                        if (appointment.getProvider() != null) {
+                            Task<Void> providerTask = appointment.getProvider().get().onSuccessTask(providerDoc -> {
+                                if (providerDoc.exists()) {
+                                    appointment.setProviderObject(providerDoc.toObject(Provider.class));
+                                }
+                                return Tasks.forResult(null);
+                            });
+                            tasks.add(providerTask);
+                        }
+
+                        if (appointment.getService() != null) {
+                            Task<Void> serviceTask = appointment.getService().get().onSuccessTask(serviceDoc -> {
+                                if (serviceDoc.exists()) {
+                                    appointment.setServiceObject(serviceDoc.toObject(Service.class));
+                                }
+                                return Tasks.forResult(null);
+                            });
+                            tasks.add(serviceTask);
+                        }
                     }
-                    onSuccess.onSuccess(list);
+
+                    Tasks.whenAll(tasks).addOnSuccessListener(aVoid -> {
+                        onSuccess.onSuccess(appointmentList);
+                    }).addOnFailureListener(onFailure);
                 })
                 .addOnFailureListener(onFailure);
     }
