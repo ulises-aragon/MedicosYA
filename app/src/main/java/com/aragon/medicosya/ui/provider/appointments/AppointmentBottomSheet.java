@@ -180,6 +180,9 @@ public class AppointmentBottomSheet extends BottomSheetDialogFragment {
 
             if (appointment.getNotesClient() != null && !appointment.getNotesClient().isEmpty()) {
                 binding.tvNotes.setText(appointment.getNotesClient());
+                binding.tvNotes.setVisibility(View.VISIBLE);
+            } else {
+                binding.tvNotes.setVisibility(View.GONE);
             }
 
             // estado

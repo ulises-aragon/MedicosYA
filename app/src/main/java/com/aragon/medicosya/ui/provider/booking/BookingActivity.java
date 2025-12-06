@@ -352,7 +352,7 @@ public class BookingActivity extends AppCompatActivity implements SlotAdapter.Sl
         appointment.setProvider(providerRef);
         appointment.setService(providerRef.collection("services").document(selectedService.getId()));
         appointment.setNotesProvider(binding.editTextNotes.getText().toString());
-        appointment.setStatusEnum(AppointmentStatus.REQUESTED);
+        appointment.setStatusEnum(AppointmentStatus.PROGRAMMED);
         appointment.setStartAt(new Timestamp(new Date(startMillis)));
         appointment.setEndAt(new Timestamp(new Date(endMillis)));
 
