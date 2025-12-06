@@ -53,6 +53,7 @@ public class PickLocationActivity extends FragmentActivity implements OnMapReady
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mMap.setMyLocationEnabled(true);
 
         mMap.setOnMapClickListener(point -> {
             selectedLatLng = point;
