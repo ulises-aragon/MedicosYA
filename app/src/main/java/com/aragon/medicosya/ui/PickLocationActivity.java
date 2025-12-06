@@ -31,7 +31,6 @@ public class PickLocationActivity extends FragmentActivity implements OnMapReady
 
     public static final String EXTRA_LAT = "extra_lat";
     public static final String EXTRA_LNG = "extra_lng";
-
     private GoogleMap mMap;
     private LatLng selectedLatLng = null;
 
@@ -47,20 +46,25 @@ public class PickLocationActivity extends FragmentActivity implements OnMapReady
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
+
+        // posición inicial: si te mandan una existente, úsala; si no, un default (por ej. San Salvador)
+        double lat = getIntent().getDoubleExtra(EXTRA_LAT, 13.6929);
+        double lng = getIntent().getDoubleExtra(EXTRA_LNG, -89.2182);
+        LatLng initial = new LatLng(lat, lng);
+
+        selectedLatLng = initial;
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-        selectedLatLng = new LatLng(13.6929, -89.2182);
-        mMap.addMarker(new MarkerOptions().position(selectedLatLng));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(initial, 13f));
+        mMap.addMarker(new MarkerOptions().position(initial));
 
         mMap.setOnMapClickListener(point -> {
             selectedLatLng = point;
             mMap.clear();
             mMap.addMarker(new MarkerOptions().position(point));
         });
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(selectedLatLng, 15f));
     }
 
     private void confirmLocation() {
