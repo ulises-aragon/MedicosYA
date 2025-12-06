@@ -109,7 +109,6 @@ public class AppointmentsFragment extends Fragment
 
     @Override
     public void onOpenClient(String clientId) {
-        Toast.makeText(requireContext(), "Abriendo cliente " + clientId, Toast.LENGTH_SHORT).show();
         Intent i = ClientDetailActivity.newIntent(requireContext(), clientId, providerRef.getId());
         startActivity(i);
     }
