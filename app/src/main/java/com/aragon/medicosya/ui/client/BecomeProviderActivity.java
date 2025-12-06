@@ -128,7 +128,7 @@ public class BecomeProviderActivity extends AppCompatActivity {
             service.setName("Medicina General");
             service.setActive(true);
             service.setDuration(60);
-            service.setDescription("Consulta general para cualqueir paciente.");
+            service.setDescription("Consulta general para cualquier paciente.");
             service.setPriceCents(1500);
 
             HashMap<String, Object> addressMap = new HashMap<>();
