@@ -59,14 +59,8 @@ public class AppointmentBottomSheet extends BottomSheetDialogFragment {
         return s;
     }
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        if (getParentFragment() instanceof Listener) {
-            listener = (Listener) getParentFragment();
-        } else if (context instanceof Listener) {
-            listener = (Listener) context;
-        }
+    public void attach(Listener listener) {
+        this.listener = listener;
     }
 
     @Nullable
