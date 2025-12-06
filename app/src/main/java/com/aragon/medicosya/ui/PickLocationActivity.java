@@ -1,20 +1,30 @@
 package com.aragon.medicosya.ui;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.aragon.medicosya.R;
+import com.aragon.medicosya.ui.client.provider.ProvidersViewModel;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class PickLocationActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -22,6 +32,7 @@ public class PickLocationActivity extends FragmentActivity implements OnMapReady
     public static final String EXTRA_LAT = "extra_lat";
     public static final String EXTRA_LNG = "extra_lng";
 
+    private FusedLocationProviderClient fusedLocationClient;
     private GoogleMap mMap;
     private LatLng selectedLatLng = null;
 
@@ -30,9 +41,7 @@ public class PickLocationActivity extends FragmentActivity implements OnMapReady
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pick_location);
 
-        SupportMapFragment mapFragment =
-                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        if (mapFragment != null) mapFragment.getMapAsync(this);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         Button btnConfirm = findViewById(R.id.btnConfirmLocation);
         btnConfirm.setOnClickListener(v -> confirmLocation());
@@ -41,21 +50,17 @@ public class PickLocationActivity extends FragmentActivity implements OnMapReady
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
-
-        // posición inicial: si te mandan una existente, úsala; si no, un default (por ej. San Salvador)
-        double lat = getIntent().getDoubleExtra(EXTRA_LAT, 13.6929);
-        double lng = getIntent().getDoubleExtra(EXTRA_LNG, -89.2182);
-        LatLng initial = new LatLng(lat, lng);
-
-        selectedLatLng = initial;
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(initial, 13f));
-        mMap.addMarker(new MarkerOptions().position(initial));
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         mMap.setOnMapClickListener(point -> {
             selectedLatLng = point;
             mMap.clear();
             mMap.addMarker(new MarkerOptions().position(point));
         });
+
+        moveCameraToUserLocation();
     }
 
     private void confirmLocation() {
@@ -69,5 +74,25 @@ public class PickLocationActivity extends FragmentActivity implements OnMapReady
         data.putExtra(EXTRA_LNG, selectedLatLng.longitude);
         setResult(Activity.RESULT_OK, data);
         finish();
+    }
+
+    @SuppressLint("MissingPermission")
+    private void moveCameraToUserLocation() {
+        if (mMap == null) return;
+        fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
+            LatLng target;
+            if (location != null) {
+                target = new LatLng(location.getLatitude(), location.getLongitude());
+            } else {
+                target = new LatLng(13.6929, -89.2182);
+            }
+
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(target, 15f));
+
+            LatLng pos = new LatLng(location.getLatitude(), location.getLongitude());
+
+            mMap.addMarker(new MarkerOptions().position(pos));
+            selectedLatLng = pos;
+        });
     }
 }

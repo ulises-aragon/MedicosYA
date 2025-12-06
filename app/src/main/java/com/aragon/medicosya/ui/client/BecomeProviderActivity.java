@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.aragon.medicosya.databinding.ActivityBecomeProviderBinding;
 import com.aragon.medicosya.enums.UserRole;
-import com.aragon.medicosya.models.Address;
 import com.aragon.medicosya.models.Provider;
 import com.aragon.medicosya.models.Service;
 import com.aragon.medicosya.ui.PickLocationActivity;
@@ -122,8 +121,8 @@ public class BecomeProviderActivity extends AppCompatActivity {
                 Toast.makeText(this, "Usuario no existe", Toast.LENGTH_LONG).show();
                 return;
             }
-            Provider provider = new Provider();
-            provider.setName(clinicName);
+            HashMap<String, Object> provider = new HashMap<>();
+            provider.put("name", clinicName);
 
             Service service = new Service();
             service.setName("Medicina General");
@@ -137,8 +136,9 @@ public class BecomeProviderActivity extends AppCompatActivity {
             addressMap.put("street", address);
             addressMap.put("location", new GeoPoint(selectedLat, selectedLng));
 
-            provider.setRating(5);
-            provider.setUser(userRef);
+            provider.put("address", addressMap);
+            provider.put("rating", 5.0);
+            provider.put("user", userRef);
 
             db.collection("providers").document(uid)
                     .set(provider)
