@@ -74,7 +74,6 @@ public class BookingActivity extends AppCompatActivity implements SlotAdapter.Sl
         providerId = getIntent().getStringExtra("providerId");
         clientId = getIntent().getStringExtra("clientId");
 
-
         if (providerId == null) {
             Toast.makeText(this, "Proveedor inválido", Toast.LENGTH_SHORT).show();
             finish();
@@ -349,7 +348,7 @@ public class BookingActivity extends AppCompatActivity implements SlotAdapter.Sl
         DocumentReference providerRef = firestore.collection("providers").document(providerId);
 
         Appointment appointment = new Appointment();
-        appointment.setClient(firestore.collection("users").document(uid));
+        appointment.setClient(firestore.collection("users").document(clientId));
         appointment.setProvider(providerRef);
         appointment.setService(providerRef.collection("services").document(selectedService.getId()));
         appointment.setNotesProvider(binding.editTextNotes.getText().toString());

@@ -135,10 +135,8 @@ public class ClientFragment extends Fragment implements ClientAdapter.OnClientCl
 
     @Override
     public void onClientClick(User client) {
-        Intent i = new Intent(requireContext(), ClientDetailActivity.class);
-        i.putExtra("clientId", client.getUid());
-        i.putExtra("providerId", providerId);
-        startActivity(i);
+        Intent intent = ClientDetailActivity.newIntent(requireContext(), client.getUid(), providerId);
+        startActivity(intent);
     }
 
     @Override
