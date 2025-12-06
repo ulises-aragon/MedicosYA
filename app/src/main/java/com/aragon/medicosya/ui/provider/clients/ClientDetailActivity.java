@@ -31,7 +31,7 @@ public class ClientDetailActivity extends AppCompatActivity
     private AppointmentAdapter adapter;
 
     public static Intent newIntent(Context ctx, String clientId, String providerId) {
-        Intent i = new Intent(ctx, ProviderDetailActivity.class);
+        Intent i = new Intent(ctx, ClientDetailActivity.class);
         i.putExtra("clientId", clientId);
         i.putExtra("providerId", providerId);
         return i;
