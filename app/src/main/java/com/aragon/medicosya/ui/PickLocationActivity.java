@@ -32,7 +32,6 @@ public class PickLocationActivity extends FragmentActivity implements OnMapReady
     public static final String EXTRA_LAT = "extra_lat";
     public static final String EXTRA_LNG = "extra_lng";
 
-    private FusedLocationProviderClient fusedLocationClient;
     private GoogleMap mMap;
     private LatLng selectedLatLng = null;
 
@@ -40,8 +39,6 @@ public class PickLocationActivity extends FragmentActivity implements OnMapReady
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pick_location);
-
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         Button btnConfirm = findViewById(R.id.btnConfirmLocation);
         btnConfirm.setOnClickListener(v -> confirmLocation());
@@ -53,7 +50,9 @@ public class PickLocationActivity extends FragmentActivity implements OnMapReady
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        mMap.setMyLocationEnabled(true);
+
+        selectedLatLng = new LatLng(13.6929, -89.2182);
+        mMap.addMarker(new MarkerOptions().position(selectedLatLng));
 
         mMap.setOnMapClickListener(point -> {
             selectedLatLng = point;
@@ -61,7 +60,7 @@ public class PickLocationActivity extends FragmentActivity implements OnMapReady
             mMap.addMarker(new MarkerOptions().position(point));
         });
 
-        moveCameraToUserLocation();
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(selectedLatLng, 15f));
     }
 
     private void confirmLocation() {
@@ -75,25 +74,5 @@ public class PickLocationActivity extends FragmentActivity implements OnMapReady
         data.putExtra(EXTRA_LNG, selectedLatLng.longitude);
         setResult(Activity.RESULT_OK, data);
         finish();
-    }
-
-    @SuppressLint("MissingPermission")
-    private void moveCameraToUserLocation() {
-        if (mMap == null) return;
-        fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
-            LatLng target;
-            if (location != null) {
-                target = new LatLng(location.getLatitude(), location.getLongitude());
-            } else {
-                target = new LatLng(13.6929, -89.2182);
-            }
-
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(target, 15f));
-
-            LatLng pos = new LatLng(location.getLatitude(), location.getLongitude());
-
-            mMap.addMarker(new MarkerOptions().position(pos));
-            selectedLatLng = pos;
-        });
     }
 }
