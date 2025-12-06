@@ -31,6 +31,7 @@ public class PickLocationActivity extends FragmentActivity implements OnMapReady
 
     public static final String EXTRA_LAT = "extra_lat";
     public static final String EXTRA_LNG = "extra_lng";
+
     private GoogleMap mMap;
     private LatLng selectedLatLng = null;
 
@@ -38,6 +39,10 @@ public class PickLocationActivity extends FragmentActivity implements OnMapReady
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pick_location);
+
+        SupportMapFragment mapFragment =
+                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        if (mapFragment != null) mapFragment.getMapAsync(this);
 
         Button btnConfirm = findViewById(R.id.btnConfirmLocation);
         btnConfirm.setOnClickListener(v -> confirmLocation());
@@ -47,14 +52,11 @@ public class PickLocationActivity extends FragmentActivity implements OnMapReady
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
 
-        // posición inicial: si te mandan una existente, úsala; si no, un default (por ej. San Salvador)
         double lat = getIntent().getDoubleExtra(EXTRA_LAT, 13.6929);
         double lng = getIntent().getDoubleExtra(EXTRA_LNG, -89.2182);
         LatLng initial = new LatLng(lat, lng);
 
         selectedLatLng = initial;
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(initial, 13f));
         mMap.addMarker(new MarkerOptions().position(initial));
 
