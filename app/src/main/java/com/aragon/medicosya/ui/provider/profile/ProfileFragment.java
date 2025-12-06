@@ -112,7 +112,7 @@ public class ProfileFragment extends Fragment {
                     Provider provider = doc.toObject(Provider.class);
                     if (provider == null) return;
 
-                    GeoPoint location = doc.getGeoPoint("location");
+                    GeoPoint location = doc.getGeoPoint("address.location");
                     if (location != null) {
                         selectedLat = location.getLatitude();
                         selectedLng = location.getLongitude();
@@ -169,6 +169,7 @@ public class ProfileFragment extends Fragment {
         Map<String, Object> addr = new HashMap<>();
         addr.put("city", city);
         addr.put("street", address);
+        addr.put("location", new GeoPoint(selectedLat, selectedLng));
 
         data.put("address", addr);
 

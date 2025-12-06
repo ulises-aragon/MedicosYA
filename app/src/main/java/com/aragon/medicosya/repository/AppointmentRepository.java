@@ -162,9 +162,6 @@ public class AppointmentRepository {
                         Appointment appointment = doc.toObject(Appointment.class);
 
                         if (appointment == null) continue;
-                        if (appointment.getStatusEnum() == AppointmentStatus.CANCELLED) continue;
-                        if (appointment.getStatusEnum() == AppointmentStatus.COMPLETED) continue;
-                        if (appointment.getStatusEnum() == AppointmentStatus.NO_SHOW) continue;
                         appointment.setId(doc.getId());
                         appointmentList.add(appointment);
 
