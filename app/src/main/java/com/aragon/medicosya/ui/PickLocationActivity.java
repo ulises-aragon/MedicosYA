@@ -53,8 +53,6 @@ public class PickLocationActivity extends FragmentActivity implements OnMapReady
         LatLng initial = new LatLng(lat, lng);
 
         selectedLatLng = initial;
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(initial, 13f));
