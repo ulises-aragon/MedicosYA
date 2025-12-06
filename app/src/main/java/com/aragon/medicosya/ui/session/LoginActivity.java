@@ -16,6 +16,7 @@ import com.aragon.medicosya.enums.AuthField;
 import com.aragon.medicosya.enums.UserRole;
 import com.aragon.medicosya.models.User;
 import com.aragon.medicosya.ui.client.ClientMainActivity;
+import com.aragon.medicosya.ui.provider.ProviderMainActivity;
 
 import java.util.Map;
 
@@ -109,8 +110,7 @@ public class LoginActivity extends AppCompatActivity {
         UserRole role = user.getRoleEnum();
         Intent intent;
         if (role == UserRole.PROVIDER) {
-            //intent = new Intent(this, ProviderMainActivity.class);
-            intent = new Intent(this, ClientMainActivity.class);
+            intent = new Intent(this, ProviderMainActivity.class);
         } else if (role == UserRole.ADMIN) {
             //intent = new Intent(this, AdminMainActivity.class);
             intent = new Intent(this, ClientMainActivity.class);

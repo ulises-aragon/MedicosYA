@@ -14,12 +14,15 @@ import com.aragon.medicosya.databinding.ActivityBecomeProviderBinding;
 import com.aragon.medicosya.enums.UserRole;
 import com.aragon.medicosya.models.Address;
 import com.aragon.medicosya.models.Provider;
+import com.aragon.medicosya.models.Service;
 import com.aragon.medicosya.ui.PickLocationActivity;
 import com.aragon.medicosya.ui.provider.ProviderMainActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+
+import java.util.HashMap;
 
 
 public class BecomeProviderActivity extends AppCompatActivity {
@@ -122,39 +125,68 @@ public class BecomeProviderActivity extends AppCompatActivity {
             Provider provider = new Provider();
             provider.setName(clinicName);
 
-            Address addressObj = new Address();
-            addressObj.setCity(city);
-            addressObj.setStreet(address);
-            addressObj.setLocation(new GeoPoint(selectedLat, selectedLng));
-            provider.setAddress(addressObj);
+            Service service = new Service();
+            service.setName("Medicina General");
+            service.setActive(true);
+            service.setDuration(60);
+            service.setDescription("Consulta general para cualqueir paciente.");
+            service.setPriceCents(1500);
+
+            HashMap<String, Object> addressMap = new HashMap<>();
+            addressMap.put("city", city);
+            addressMap.put("street", address);
+            addressMap.put("location", new GeoPoint(selectedLat, selectedLng));
+
             provider.setRating(5);
             provider.setUser(userRef);
 
             db.collection("providers").document(uid)
                     .set(provider)
                     .addOnSuccessListener(aVoid -> {
-                        db.collection("users").document(uid)
-                                .update("role", UserRole.PROVIDER)
+                        db.collection("providers").document(uid)
+                                .update("address", addressMap)
                                 .addOnSuccessListener(v -> {
-                                    setLoading(false);
-                                    Toast.makeText(this, "Cuenta convertida a proveedor", Toast.LENGTH_LONG).show();
-                                    Intent intent = new Intent(this, ProviderMainActivity.class);
-                                    startActivity(intent);
-                                    finish();
+                                    db.collection("providers")
+                                            .document(uid)
+                                            .collection("services")
+                                            .add(service)
+                                            .addOnSuccessListener(serviceRef -> {
+                                                db.collection("users").document(uid)
+                                                        .update("role", UserRole.PROVIDER)
+                                                        .addOnSuccessListener(vv -> {
+                                                            setLoading(false);
+                                                            Toast.makeText(this, "Cuenta convertida a proveedor", Toast.LENGTH_LONG).show();
+                                                            Intent intent = new Intent(this, ProviderMainActivity.class);
+                                                            startActivity(intent);
+                                                            finish();
+                                                        })
+                                                        .addOnFailureListener(e -> {
+                                                            setLoading(false);
+                                                            Toast.makeText(this, "Proveedor creado, pero error al actualizar rol: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                                            finish();
+                                                        });
+                                            })
+                                            .addOnFailureListener(e -> {
+                                                setLoading(false);
+                                                Toast.makeText(this, "Error guardando servicio: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                                finish();
+                                            });
                                 })
                                 .addOnFailureListener(e -> {
                                     setLoading(false);
-                                    Toast.makeText(this, "Proveedor creado, pero error al actualizar rol: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(this, "Error guardando dirección: " + e.getMessage(), Toast.LENGTH_LONG).show();
                                     finish();
                                 });
                     })
                     .addOnFailureListener(e -> {
                         setLoading(false);
                         Toast.makeText(this, "Error guardando proveedor: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        finish();
                     });
         }).addOnFailureListener(e -> {
             setLoading(false);
-            Toast.makeText(this, "Error cargando usuario: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Error guardando proveedor: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            finish();
         });
     }
 }
