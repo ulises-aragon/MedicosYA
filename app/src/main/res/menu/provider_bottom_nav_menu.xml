@@ -18,7 +18,7 @@
         android:title="Disponibilidad" />
 
     <item
-        android:id="@+id/navigation_provider_info"
+        android:id="@+id/navigation_provider_profile"
         android:icon="@drawable/outline_article_person_24"
         android:title="Perfil" />
 
