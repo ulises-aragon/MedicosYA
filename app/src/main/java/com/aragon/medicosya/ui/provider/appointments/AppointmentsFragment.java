@@ -108,8 +108,10 @@ public class AppointmentsFragment extends Fragment
 
     @Override
     public void onOpenClient(String clientId) {
-        Intent a = ClientDetailActivity.newIntent(requireContext(), clientId, providerRef.getId());
-        startActivity(a);
+        Intent i = new Intent(requireContext(), ClientDetailActivity.class);
+        i.putExtra("clientId", clientId);
+        i.putExtra("providerId", providerRef.getId());
+        startActivity(i);
     }
 
     @Override

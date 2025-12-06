@@ -71,7 +71,7 @@ public class ClientDetailActivity extends AppCompatActivity
         userRepository.getUserFromReference(clientRef, user -> {
             if (user == null) return;
             binding.tvClientName.setText(user.getName());
-            binding.tvClientName.setText(user.getEmail());
+            binding.tvClientEmail.setText(user.getEmail());
         }, e -> {
             Toast.makeText(this, "Error cargando cliente: " + e.getMessage(), Toast.LENGTH_LONG).show();
         });
