@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.aragon.medicosya.ui.client.BecomeProviderActivity;
 import com.aragon.medicosya.ui.session.LoginActivity;
 import com.aragon.medicosya.databinding.FragmentAccountBinding;
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,6 +47,10 @@ public class AccountFragment extends Fragment {
         binding.accountChangeUsername.setOnClickListener(v -> showChangeUsernameDialog());
 
         binding.logOutBttn.setOnClickListener(v -> signOutAndGoToLogin());
+        binding.becomeProviderBttn.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), BecomeProviderActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void loadCurrentUserName() {

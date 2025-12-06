@@ -77,11 +77,19 @@
         app:layout_constraintTop_toBottomOf="@+id/accountHeader">
 
         <Button
+            android:id="@+id/becomeProviderBttn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ser proveedor"
+            android:textSize="24sp" />
+
+        <Button
             android:id="@+id/logOutBttn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="#D97E69"
             android:text="Cerrar sesión"
             android:textSize="24sp" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

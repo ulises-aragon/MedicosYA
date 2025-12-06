@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_provider_appointments">
+
+    <fragment
+        android:id="@+id/navigation_provider_appointments"
+        android:name="com.aragon.medicosya.ui.provider.appointments.AppointmentsFragment"
+        android:label="Agenda"
+        tools:layout="@layout/fragment_provider_appointments" />
+
+    <fragment
+        android:id="@+id/navigation_provider_clients"
+        android:name="com.aragon.medicosya.ui.provider.clients.ClientFragment"
+        android:label="Clientes"
+        tools:layout="@layout/fragment_provider_clients" />
+
+    <fragment
+        android:id="@+id/navigation_provider_availability"
+        android:name="com.aragon.medicosya.ui.provider.availability.AvailabilityFragment"
+        android:label="Disponibilidad"
+        tools:layout="@layout/fragment_provider_availability" />
+
+    <fragment
+        android:id="@+id/navigation_provider_profile"
+        android:name="com.aragon.medicosya.ui.provider.profile.ProfileFragment"
+        android:label="Perfil"
+        tools:layout="@layout/fragment_provider_profile" />
+</navigation>

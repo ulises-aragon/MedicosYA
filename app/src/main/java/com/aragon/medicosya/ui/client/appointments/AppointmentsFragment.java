@@ -69,8 +69,14 @@ public class AppointmentsFragment extends Fragment implements AppointmentAdapter
     }
 
     @Override
-    public void onAppointmentClick(Appointment appt) {
-        // TO-DO
+    public void onAppointmentClick(Appointment appointment) {
+        if (appointment.getId() == null) {
+            Toast.makeText(requireContext(),
+                    "Cita invalida", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        AppointmentBottomSheet sheet = AppointmentBottomSheet.newInstance(appointment.getId());
+        sheet.show(getChildFragmentManager(), "appointment_bottom_sheet");
     }
 
     @Override

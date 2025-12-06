@@ -5,6 +5,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -76,5 +77,41 @@ public class AvailabilityRepository {
                                 onSuccess.onSuccess(result);
                             }).addOnFailureListener(onFailure);
                 }).addOnFailureListener(onFailure);
+    }
+
+    public void setRecurringAvailability(DocumentReference providerRef,
+                                         int weekday,
+                                         String from,
+                                         String to,
+                                         boolean isAvailable,
+                                         OnSuccessListener<Void> onSuccess,
+                                         OnFailureListener onFailure) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("type", "RECURRING");
+        data.put("weekday", weekday);
+        data.put("from", from);
+        data.put("to", to);
+        data.put("isAvailable", isAvailable);
+
+        // podrías usar documentId = weekday-from-to o auto-id
+        providerRef.collection("availability")
+                .add(data)
+                .addOnSuccessListener(docRef -> onSuccess.onSuccess(null))
+                .addOnFailureListener(onFailure);
+    }
+
+    public void getAvailabilityForProvider(DocumentReference providerRef,
+                                           OnSuccessListener<List<Availability>> onSuccess,
+                                           OnFailureListener onFailure) {
+        providerRef.collection("availability")
+                .get()
+                .addOnSuccessListener(qs -> {
+                    List<Availability> list = qs.toObjects(Availability.class);
+                    for (int i = 0; i < qs.size(); i++) {
+                        list.get(i).setId(qs.getDocuments().get(i).getId());
+                    }
+                    onSuccess.onSuccess(list);
+                })
+                .addOnFailureListener(onFailure);
     }
 }

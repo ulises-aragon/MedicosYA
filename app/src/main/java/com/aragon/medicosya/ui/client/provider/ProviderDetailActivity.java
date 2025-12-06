@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -20,12 +22,25 @@ import java.util.ArrayList;
 public class ProviderDetailActivity extends AppCompatActivity implements ServiceAdapter.ServiceClickListener {
 
     private static final String EXTRA_PROVIDER_ID = "providerId";
+    private static final String EXTRA_GO_TO_BOOKING = "goToBooking";
 
     private ActivityProviderDetailBinding binding;
     private String providerId;
     private Provider provider;
     private ServiceRepository serviceRepo;
     private ServiceAdapter serviceAdapter;
+
+    private final ActivityResultLauncher<Intent> bookingLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == AppCompatActivity.RESULT_OK) {
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("navigateTo", "appointments");
+                    setResult(RESULT_OK, resultIntent);
+                    finish();
+                }
+            }
+    );
 
     public static Intent newIntent(Context ctx, String providerId) {
         Intent i = new Intent(ctx, ProviderDetailActivity.class);
@@ -48,6 +63,13 @@ public class ProviderDetailActivity extends AppCompatActivity implements Service
             return;
         }
 
+        boolean shouldGoToBooking = getIntent().getBooleanExtra(EXTRA_GO_TO_BOOKING, false);
+        if (shouldGoToBooking) {
+            Intent intent = new Intent(this, BookingActivity.class);
+            intent.putExtra("providerId", providerId);
+            bookingLauncher.launch(intent);
+        }
+
         serviceAdapter = new ServiceAdapter(new ArrayList<>(), this);
         binding.rvServices.setLayoutManager(new LinearLayoutManager(this));
         binding.rvServices.setAdapter(serviceAdapter);
@@ -55,10 +77,13 @@ public class ProviderDetailActivity extends AppCompatActivity implements Service
         binding.btnOpenBooking.setOnClickListener(v -> {
             Intent intent = new Intent(this, BookingActivity.class);
             intent.putExtra("providerId", providerId);
-            startActivity(intent);
+            bookingLauncher.launch(intent);
         });
 
-        binding.exitProviderDetail.setOnClickListener(v -> finish());
+        binding.exitProviderDetail.setOnClickListener(v -> {
+            setResult(RESULT_CANCELED);
+            finish();
+        });
 
         loadProvider();
     }
@@ -105,6 +130,6 @@ public class ProviderDetailActivity extends AppCompatActivity implements Service
         Intent intent = new Intent(this, BookingActivity.class);
         intent.putExtra("providerId", providerId);
         intent.putExtra("serviceId", service.getId());
-        startActivity(intent);
+        bookingLauncher.launch(intent);
     }
 }

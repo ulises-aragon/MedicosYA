@@ -95,8 +95,13 @@ public class AppointmentRepository {
                     List<Appointment> appointmentList = new ArrayList<>();
 
                     for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
+                        // Crear una cita
                         Appointment appointment = doc.toObject(Appointment.class);
+
                         if (appointment == null) continue;
+                        if (appointment.getStatusEnum() == AppointmentStatus.CANCELLED) continue;
+                        if (appointment.getStatusEnum() == AppointmentStatus.COMPLETED) continue;
+                        if (appointment.getStatusEnum() == AppointmentStatus.NO_SHOW) continue;
                         appointment.setId(doc.getId());
                         appointmentList.add(appointment);
 
@@ -133,4 +138,65 @@ public class AppointmentRepository {
                 .orderBy("startAt", Query.Direction.DESCENDING)
                 .addSnapshotListener(listener);
     }
+
+    public void cancelAppointment(String appointmentId,
+                                  OnSuccessListener<Void> onSuccess,
+                                  OnFailureListener onFailure) {
+        updateAppointmentStatus(appointmentId, AppointmentStatus.CANCELLED, onSuccess, onFailure);
+    }
+
+    // citas del proveedor
+    public void getAppointmentsForProvider(DocumentReference providerRef,
+                                           OnSuccessListener<List<Appointment>> onSuccess,
+                                           OnFailureListener onFailure) {
+        firestore.collection("appointments")
+                .whereEqualTo("provider", providerRef)
+                .orderBy("startAt", Query.Direction.DESCENDING)
+                .get()
+                .addOnSuccessListener(qs -> {
+                    List<Appointment> list = qs.toObjects(Appointment.class);
+                    for (int i = 0; i < qs.size(); i++) {
+                        list.get(i).setId(qs.getDocuments().get(i).getId());
+                    }
+                    onSuccess.onSuccess(list);
+                })
+                .addOnFailureListener(onFailure);
+    }
+
+    // citas del proveedor filtradas por estado (para “solicitudes”)
+    public void getPendingAppointmentsForProvider(DocumentReference providerRef,
+                                                  OnSuccessListener<List<Appointment>> onSuccess,
+                                                  OnFailureListener onFailure) {
+        firestore.collection("appointments")
+                .whereEqualTo("provider", providerRef)
+                .whereEqualTo("status", AppointmentStatus.REQUESTED.toString())
+                .orderBy("startAt", Query.Direction.ASCENDING)
+                .get()
+                .addOnSuccessListener(qs -> {
+                    List<Appointment> list = qs.toObjects(Appointment.class);
+                    for (int i = 0; i < qs.size(); i++) {
+                        list.get(i).setId(qs.getDocuments().get(i).getId());
+                    }
+                    onSuccess.onSuccess(list);
+                })
+                .addOnFailureListener(onFailure);
+    }
+
+    // actualizar estado (confirmar, cancelar, completar, etc.)
+    public void updateAppointmentStatus(String appointmentId,
+                                        AppointmentStatus newStatus,
+                                        OnSuccessListener<Void> onSuccess,
+                                        OnFailureListener onFailure) {
+
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("status", newStatus.toString());
+        updates.put("updatedAt", com.google.firebase.Timestamp.now());
+
+        firestore.collection("appointments")
+                .document(appointmentId)
+                .update(updates)
+                .addOnSuccessListener(onSuccess)
+                .addOnFailureListener(onFailure);
+    }
+
 }

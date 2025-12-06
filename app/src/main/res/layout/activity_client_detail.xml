@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvClientName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nombre del cliente"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvClientEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="correo@ejemplo.com"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp" />
+
+            <Button
+                android:id="@+id/btnNewAppointment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Agendar nueva cita con este cliente"
+                android:layout_marginTop="12dp" />
+
+            <TextView
+                android:id="@+id/tvHistoryLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Historial de citas con este cliente"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvAppointments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:nestedScrollingEnabled="false" />
+
+            <TextView
+                android:id="@+id/tvEmptyHistory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Aún no hay citas con este cliente."
+                android:visibility="gone"
+                android:layout_marginTop="8dp" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <ImageButton
+    android:id="@+id/exitClientDetail"
+    android:layout_width="35dp"
+    android:layout_height="35dp"
+    android:scaleType="centerCrop"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:srcCompat="@drawable/outline_close_small_24"
+    app:tint="@color/less_darker_gray"
+    android:background="?attr/selectableItemBackgroundBorderless" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,7 +24,7 @@
                 android:id="@+id/bookingTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Reserva tu cita"
+                android:text="Agenda una cita con este usuario"
                 android:textAlignment="center"
                 android:textSize="34sp"
                 android:textStyle="bold" />
@@ -32,15 +32,6 @@
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="30dp" />
-
-            <TextView
-                android:id="@+id/tvProviderName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Proveedor"
-                android:textAlignment="center"
-                android:textSize="24sp"
-                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvChooseServiceLabel"
@@ -145,7 +136,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
-                android:text="Solicitar cita" />
+                android:text="Agendar citas" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

@@ -70,6 +70,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         Log.i("Map Fragment", "Observing providers...");
         viewModel = new ViewModelProvider(requireActivity()).get(ProvidersViewModel.class);
+
         viewModel.getProviders().observe(getViewLifecycleOwner(), providers -> {
             addMarkers(providers);
         });

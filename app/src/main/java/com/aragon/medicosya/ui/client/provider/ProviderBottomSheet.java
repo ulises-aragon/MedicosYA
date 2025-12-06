@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 
 import com.aragon.medicosya.databinding.FragmentProviderBottomSheetBinding;
 import com.aragon.medicosya.models.Provider;
+import com.aragon.medicosya.ui.client.ClientMainActivity;
 import com.aragon.medicosya.ui.client.booking.BookingActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -56,13 +57,14 @@ public class ProviderBottomSheet extends BottomSheetDialogFragment {
 
         binding.btnViewDetail.setOnClickListener(v -> {
             Intent intent = ProviderDetailActivity.newIntent(requireContext(), providerId);
+            intent.putExtra("goToBooking", false);
             startActivity(intent);
             dismiss();
         });
 
         binding.btnBook.setOnClickListener(v -> {
-            Intent intent = new Intent(requireContext(), BookingActivity.class);
-            intent.putExtra("providerId", providerId);
+            Intent intent = ProviderDetailActivity.newIntent(requireContext(), providerId);
+            intent.putExtra("goToBooking", true);
             startActivity(intent);
             dismiss();
         });

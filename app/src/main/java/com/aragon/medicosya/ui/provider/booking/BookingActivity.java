@@ -1,7 +1,6 @@
-package com.aragon.medicosya.ui.client.booking;
+package com.aragon.medicosya.ui.provider.booking;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -10,7 +9,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 
-import com.aragon.medicosya.databinding.ActivityBookingBinding;
+import com.aragon.medicosya.databinding.ActivityProviderBookingBinding;
 import com.aragon.medicosya.enums.AppointmentStatus;
 import com.aragon.medicosya.enums.AvailabilityType;
 import com.aragon.medicosya.enums.PaymentMethod;
@@ -30,10 +29,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.ZonedDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -42,13 +40,13 @@ import java.util.Locale;
 
 public class BookingActivity extends AppCompatActivity implements SlotAdapter.SlotClick {
 
-    private ActivityBookingBinding binding;
+    private ActivityProviderBookingBinding binding;
     private final ServiceRepository serviceRepository = new ServiceRepository();
     private final AppointmentRepository appointmentRepository = new AppointmentRepository();
     private final FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
     private String providerId;
-    private String preselectedServiceId;
+    private String clientId;
     private DocumentReference providerRef;
 
     private List<Service> services = new ArrayList<>();
@@ -70,11 +68,12 @@ public class BookingActivity extends AppCompatActivity implements SlotAdapter.Sl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityBookingBinding.inflate(getLayoutInflater());
+        binding = ActivityProviderBookingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         providerId = getIntent().getStringExtra("providerId");
-        preselectedServiceId = getIntent().getStringExtra("serviceId");
+        clientId = getIntent().getStringExtra("clientId");
+
 
         if (providerId == null) {
             Toast.makeText(this, "Proveedor inválido", Toast.LENGTH_SHORT).show();
@@ -83,13 +82,6 @@ public class BookingActivity extends AppCompatActivity implements SlotAdapter.Sl
         }
 
         providerRef = firestore.collection("providers").document(providerId);
-
-        providerRef.get().addOnSuccessListener(doc -> {
-            if (doc != null && doc.exists()) {
-                String name = doc.getString("name");
-                binding.tvProviderName.setText(name);
-            }
-        });
 
         binding.rvSlots.setLayoutManager(new GridLayoutManager(this, spanCount));
         binding.rvSlots.setAdapter(slotAdapter);
@@ -109,10 +101,7 @@ public class BookingActivity extends AppCompatActivity implements SlotAdapter.Sl
         });
 
         binding.btnPickDate.setOnClickListener(v -> openDatePicker());
-        binding.exitBooking.setOnClickListener(v -> {
-            setResult(RESULT_CANCELED);
-            finish();
-        });
+        binding.exitBooking.setOnClickListener(v -> finish());
         binding.bttnComplete.setOnClickListener(v -> bookAppointment());
 
         binding.bttnComplete.setEnabled(false);
@@ -130,17 +119,6 @@ public class BookingActivity extends AppCompatActivity implements SlotAdapter.Sl
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, names);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             binding.spinnerServices.setAdapter(adapter);
-
-            if (preselectedServiceId != null) {
-                for (int i = 0; i < services.size(); i++) {
-                    if (preselectedServiceId.equals(services.get(i).getId())) {
-                        binding.spinnerServices.setSelection(i);
-                        selectedService = services.get(i);
-                        updateServiceMeta();
-                        break;
-                    }
-                }
-            }
         }, e -> Toast.makeText(this, "Error cargando servicios: " + e.getMessage(), Toast.LENGTH_LONG).show());
     }
 
@@ -374,7 +352,7 @@ public class BookingActivity extends AppCompatActivity implements SlotAdapter.Sl
         appointment.setClient(firestore.collection("users").document(uid));
         appointment.setProvider(providerRef);
         appointment.setService(providerRef.collection("services").document(selectedService.getId()));
-        appointment.setNotesClient(binding.editTextNotes.getText().toString());
+        appointment.setNotesProvider(binding.editTextNotes.getText().toString());
         appointment.setStatusEnum(AppointmentStatus.REQUESTED);
         appointment.setStartAt(new Timestamp(new Date(startMillis)));
         appointment.setEndAt(new Timestamp(new Date(endMillis)));
@@ -391,7 +369,6 @@ public class BookingActivity extends AppCompatActivity implements SlotAdapter.Sl
         appointmentRepository.createAppointment(appointment, appointmentId -> {
             binding.progress.setVisibility(View.GONE);
             Toast.makeText(this, "Cita solicitada con exito", Toast.LENGTH_LONG).show();
-            setResult(RESULT_OK);
             finish();
         }, e -> {
             binding.progress.setVisibility(View.GONE);

@@ -6,7 +6,8 @@ import androidx.annotation.NonNull;
 
 public enum AppointmentStatus {
     REQUESTED("PENDIENTE", Color.parseColor("#9B64D3")),
-    CONFIRMED("CONFIRMADA", Color.parseColor("#009688")),
+    CONFIRMED("AGENDADA", Color.parseColor("#009688")),
+    PROGRAMMED("PROGRAMADA", Color.parseColor("#9B64D3")),
     CHECKED_IN("EN PROCESO", Color.parseColor("#009688")),
     COMPLETED("COMPLETADA", Color.parseColor("#009688")),
     CANCELLED("CANCELADA", Color.parseColor("#9B64D3")),

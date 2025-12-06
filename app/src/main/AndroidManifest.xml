@@ -45,6 +45,19 @@
         <activity
             android:name=".ui.client.booking.BookingActivity"
             android:exported="false"/>
+        <activity
+            android:name=".ui.provider.booking.BookingActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".ui.provider.clients.ClientDetailActivity"
+            android:exported="false"/>
+        <activity android:name=".ui.PickLocationActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".ui.provider.ProviderMainActivity"
+            android:exported="false"/>
+        <activity android:name=".ui.client.BecomeProviderActivity"
+            android:exported="false"/>
     </application>
 
 </manifest>

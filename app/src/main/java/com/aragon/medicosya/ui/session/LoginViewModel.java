@@ -86,10 +86,10 @@ public class LoginViewModel extends ViewModel {
                             (DocumentSnapshot doc) -> {
                                 loading.setValue(false);
                                 if (doc.exists()) {
-                                    User u = doc.toObject(User.class);
-                                    if (u != null) {
-                                        if (u.getUid() == null || u.getUid().isEmpty()) u.setUid(doc.getId());
-                                        navigateEvent.setValue(new Event<>(u));
+                                    User user = doc.toObject(User.class);
+                                    if (user != null) {
+                                        if (user.getUid() == null || user.getUid().isEmpty()) user.setUid(doc.getId());
+                                        navigateEvent.setValue(new Event<>(user));
                                     } else {
                                         toastError.setValue(new Event<>("No se pudo mapear el usuario"));
                                     }
